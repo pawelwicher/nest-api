@@ -1,4 +1,5 @@
-import { cat, existy, isIndexed, truthy } from './lib';
+import _ from 'underscore';
+import { butLast, cat, construct, existy, interpose, isIndexed, mapcat, truthy } from './lib';
 
 describe('Lib', () => {
 
@@ -28,6 +29,22 @@ describe('Lib', () => {
 
   it('cat should return proper result', () => {
     expect(cat([1, 2, 3], [4, 5], [6, 7, 8])).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+  });
+
+  it('construct should return proper result', () => {
+    expect(construct(42, [1, 2, 3])).toEqual([42, 1, 2, 3]);
+  });
+
+  it('mapcat should return proper result', () => {
+    expect(mapcat(x => construct(x, [',']), [1, 2, 3])).toEqual([1, ',', 2, ',', 3, ',']);
+  });
+
+  it('butLast should return proper result', () => {
+    expect(butLast([1, 2, 3])).toEqual([1, 2]);
+  });
+
+  it('interpose should return proper result', () => {
+    expect(interpose(',', [1, 2, 3])).toEqual([1, ',', 2, ',', 3]);
   });
 
 });
