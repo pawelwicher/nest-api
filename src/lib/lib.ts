@@ -36,3 +36,32 @@ export function butLast(coll) {
 export function interpose(inter, coll) {
   return butLast(mapcat(x => construct(x, [inter]), coll));
 }
+
+export function project(table, keys) {
+  return _.map(table, x => _.pick(x, keys))
+}
+
+export function rename(obj, newNames) {
+  return _.reduce(newNames, (o, nu, old) => {
+    if (_.has(obj, old)) {
+      o[nu] = obj[old];
+    }
+    return o;
+  },
+  _.omit(obj, _.keys(newNames)));
+}
+
+export function as(table, newNames) {
+  return _.map(table, x => rename(x, newNames));
+}
+
+export function restrict(table, pred) {
+  return _.reduce(table, (newTable, obj) => {
+    if (truthy(pred(obj))) {
+      return newTable
+    } else {
+      return _.without(newTable, obj);
+    }
+  },
+  table);
+}
