@@ -15,7 +15,7 @@ export function isIndexed(x) {
 export function cat(...args: any[]) {
   const head = _.first(args);
   if (existy(head)) {
-    return head.concat.apply(head, _.rest(args));
+    return head.concat(... _.rest(args));
   } else {
     return [];
   }
@@ -26,7 +26,7 @@ export function construct(head, tail) {
 }
 
 export function mapcat(fun, coll) {
-  return cat.apply(null, _.map(coll, fun));
+  return cat(... _.map(coll, fun));
 }
 
 export function butLast(coll) {
