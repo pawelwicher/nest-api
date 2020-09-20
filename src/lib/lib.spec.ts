@@ -1,4 +1,5 @@
-import { as, butLast, cat, construct, existy, interpose, isIndexed, mapcat, project, rename, restrict, truthy } from './lib';
+import _ from 'underscore';
+import { as, best, butLast, cat, construct, existy, finder, interpose, isIndexed, mapcat, plucker, project, rename, restrict, truthy } from './lib';
 
 describe('Lib', () => {
 
@@ -109,6 +110,26 @@ describe('Lib', () => {
       x => x.id > 1
     );
     expect(actual).toEqual(expected);
+  });
+
+  it('plucker should return proper result', () => {
+    const pluckFoo = plucker('foo');
+    expect(pluckFoo(null)).toEqual(null);
+    expect(pluckFoo({ foo: 1, bar: 2})).toEqual(1);
+  });
+
+  it('finder should return proper result', () => {
+    expect(finder(_.identity, Math.max, [1, 2, 3])).toEqual(3);
+    const table = [
+      { id: 1, name: 'abc', value: 42 },
+      { id: 2, name: 'abd', value: 43 },
+      { id: 3, name: 'abe', value: 44 }
+    ];
+    expect(finder(plucker('id'), Math.max, table)).toEqual({ id: 3, name: 'abe', value: 44 });
+  });
+
+  it('best should return proper result', () => {
+    expect(best((x, y) => x > y, [1, 2, 3])).toEqual(3);
   });
 
 });
