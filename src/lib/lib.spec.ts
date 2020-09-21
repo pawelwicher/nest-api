@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, as, best, butLast, cat, construct, existy, finder, interpose, isIndexed, iterateUntil, mapcat, plucker, project, rename, repeatedly, restrict, truthy } from './lib';
+import { always, as, best, butLast, cat, construct, existy, finder, fnull, interpose, isIndexed, iterateUntil, mapcat, plucker, project, rename, repeatedly, restrict, truthy } from './lib';
 
 describe('Lib', () => {
 
@@ -145,6 +145,13 @@ describe('Lib', () => {
     const actual = iterateUntil(x => x + x, x => x <= 1024, 1);
     const expected = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
     expect(actual).toEqual(expected);
+  });
+
+  it('fnull should return proper result', () => {
+    const mult: (x: any, y: any) => any = fnull((x, y) => x * y, 1, 1)
+    expect(mult(2, 3)).toEqual(6);
+    expect(mult(2, null)).toEqual(2);
+    expect(mult(null, null)).toEqual(1);
   });
 
 });

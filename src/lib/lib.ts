@@ -1,4 +1,3 @@
-import { check } from 'prettier';
 import _ from 'underscore';
 
 export function existy(x) {
@@ -105,4 +104,8 @@ export function iterateUntil(fun, check, init) {
   }
 
   return ret;
+}
+
+export function fnull(fun, ... defaults: any[]) {
+  return (... args: any[]) => fun.apply(null, _.map(args, (arg, i) => existy(arg) ? arg : defaults[i]));
 }
