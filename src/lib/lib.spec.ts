@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { as, best, butLast, cat, construct, existy, finder, interpose, isIndexed, mapcat, plucker, project, rename, restrict, truthy } from './lib';
+import { always, as, best, butLast, cat, construct, existy, finder, interpose, isIndexed, iterateUntil, mapcat, plucker, project, rename, repeatedly, restrict, truthy } from './lib';
 
 describe('Lib', () => {
 
@@ -130,6 +130,21 @@ describe('Lib', () => {
 
   it('best should return proper result', () => {
     expect(best((x, y) => x > y, [1, 2, 3])).toEqual(3);
+  });
+
+  it('always should return proper result', () => {
+    const always10 = always(10);
+    expect(always10()).toEqual(10);
+  });
+  
+  it('repeatedly should return proper result', () => {
+    expect(repeatedly(3, n => 'id' + n)).toEqual(['id0', 'id1', 'id2']);
+  });
+
+  it('iterateUntil should return proper result', () => {
+    const actual = iterateUntil(x => x + x, x => x <= 1024, 1);
+    const expected = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
+    expect(actual).toEqual(expected);
   });
 
 });

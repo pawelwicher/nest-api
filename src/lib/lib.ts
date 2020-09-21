@@ -1,3 +1,4 @@
+import { check } from 'prettier';
 import _ from 'underscore';
 
 export function existy(x) {
@@ -82,4 +83,26 @@ export function finder(valueFun, bestFun, coll) {
 
 export function best(fun, coll) {
   return _.reduce(coll, (x, y) => fun(x, y) ? x : y);
+}
+
+export function always(value) {
+  return function() {
+    return value;
+  }
+}
+
+export function repeatedly(times, fun) {
+  return _.map(_.range(times), fun);
+}
+
+export function iterateUntil(fun, check, init) {
+  const ret = [];
+  let result = fun(init);
+
+  while (check(result)) {
+    ret.push(result);
+    result = fun(result);
+  }
+
+  return ret;
 }
