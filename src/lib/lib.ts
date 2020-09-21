@@ -65,3 +65,21 @@ export function restrict(table, pred) {
   },
   table);
 }
+
+export function plucker(field) {
+  return function(obj) {
+    return obj && obj[field];
+  }
+}
+
+export function finder(valueFun, bestFun, coll) {
+  return _.reduce(coll, (best, current) => {
+    const bestValue = valueFun(best);
+    const currentValue = valueFun(current);
+    return bestValue === bestFun(bestValue, currentValue) ? best : current;
+  });
+}
+
+export function best(fun, coll) {
+  return _.reduce(coll, (x, y) => fun(x, y) ? x : y);
+}
