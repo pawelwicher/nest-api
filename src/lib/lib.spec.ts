@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, as, best, butLast, cat, construct, existy, finder, fnull, interpose, isIndexed, iterateUntil, mapcat, plucker, project, rename, repeatedly, restrict, truthy } from './lib';
+import { always, as, best, butLast, cat, construct, existy, finder, fnull, interpose, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, truthy } from './lib';
 
 describe('Lib', () => {
 
@@ -25,6 +25,13 @@ describe('Lib', () => {
     expect(isIndexed([])).toBeTruthy();
     expect(isIndexed('abc')).toBeTruthy();
     expect(isIndexed(1)).toBeFalsy();
+  });
+
+  it('nth should return proper result', () => {
+    expect(() => nth([1, 2, 3], 'abc')).toThrowError('expected number as index');
+    expect(() => nth({ foo: 1 }, 1)).toThrowError('non-indexed type');
+    expect(() => nth([1, 2, 3], 5)).toThrowError('index out of bounds');
+    expect(nth([1, 2, 3], 1)).toEqual(2);
   });
 
   it('cat should return proper result', () => {

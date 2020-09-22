@@ -1,5 +1,9 @@
 import _ from 'underscore';
 
+function fail(thing) {
+  throw Error(thing);
+}
+
 export function existy(x) {
   return x != null;
 }
@@ -10,6 +14,19 @@ export function truthy(x) {
 
 export function isIndexed(x) {
   return _.isArray(x) || _.isString(x);
+}
+
+export function nth(a, index) {
+  if (!_.isNumber(index)) {
+    fail('expected number as index');
+  }
+  if (!isIndexed(a)) {
+    fail('non-indexed type');
+  }
+  if (index < 0 || index > a.length - 1) {
+    fail('index out of bounds');
+  }
+  return a[index];
 }
 
 export function cat(...args: any[]) {
@@ -107,5 +124,5 @@ export function iterateUntil(fun, check, init) {
 }
 
 export function fnull(fun, ... defaults: any[]) {
-  return (... args: any[]) => fun.apply(null, _.map(args, (arg, i) => existy(arg) ? arg : defaults[i]));
+  return (... args: any[]) => fun(... _.map(args, (arg, i) => existy(arg) ? arg : defaults[i]));
 }
