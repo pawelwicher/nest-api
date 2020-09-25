@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, as, best, butLast, cat, construct, existy, finder, fnull, interpose, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, truthy } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, construct, defaults, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -22,6 +22,12 @@ describe('Lib', () => {
   });
 
   it('truthy should return proper result', () => {
+    expect(doWhen(true, () => 1)).toEqual(1);
+    expect(doWhen(false, () => 1)).toEqual(undefined);
+  });
+
+
+  it('isIndexed should return proper result', () => {
     expect(isIndexed([])).toBeTruthy();
     expect(isIndexed('abc')).toBeTruthy();
     expect(isIndexed(1)).toBeFalsy();
@@ -154,11 +160,53 @@ describe('Lib', () => {
     expect(actual).toEqual(expected);
   });
 
+  it('invoker should return proper result', () => {
+    const rev = invoker('reverse', Array.prototype.reverse);
+    expect(rev([1, 2, 3])).toEqual([3, 2, 1]);
+  });
+
   it('fnull should return proper result', () => {
     const mult: (x: any, y: any) => any = fnull((x, y) => x * y, 1, 1)
     expect(mult(2, 3)).toEqual(6);
     expect(mult(2, null)).toEqual(2);
     expect(mult(null, null)).toEqual(1);
+  });
+
+  it('defaults should return proper result', () => {
+    const doSomething = (config) => {
+      const lookup = defaults({ foo: 42 });
+      return lookup(config, 'foo');
+    }
+    expect(doSomething({ foo: 100 })).toEqual(100);
+    expect(doSomething({})).toEqual(42);
+  });  
+
+  it('aMap should return proper result', () => {
+    expect(aMap({})).toBeTruthy();
+    expect(aMap(1)).toBeFalsy();
+  });
+
+  it('hasKeys should return proper result', () => {
+    const validator = hasKeys('foo', 'bar');
+    expect(validator({ foo: 1, bar: 2 })).toBeTruthy();
+    expect(validator({ foo: 1 })).toBeFalsy();
+  });
+
+  it('validator should return proper result', () => {
+    const fun = validator('test message', x => x === 1);
+    expect(fun(1)).toBeTruthy();
+    expect(fun(2)).toBeFalsy();
+    expect(fun.message).toEqual('test message');
+  });
+
+  it('checker should return proper result', () => {
+    const checkcommand = checker(
+      validator('must be a map', aMap),
+      hasKeys('msg', 'type')
+    );
+    expect(checkcommand({ msg: 'foo', type: 'test' })).toEqual([]);
+    expect(checkcommand(42)).toEqual(['must be a map', 'Must have keys: msg type']);
+    expect(checkcommand({})).toEqual(['Must have keys: msg type']);
   });
 
 });

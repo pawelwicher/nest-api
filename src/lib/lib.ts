@@ -12,6 +12,14 @@ export function truthy(x) {
   return x !== false && existy(x);
 }
 
+export function doWhen(cond, action) {
+  if (truthy(cond)) {
+    return action();
+  } else {
+    return undefined;
+  }
+}
+
 export function isIndexed(x) {
   return _.isArray(x) || _.isString(x);
 }
@@ -123,6 +131,55 @@ export function iterateUntil(fun, check, init) {
   return ret;
 }
 
+export function invoker(name, method) {
+  return function(target, ...args: any[]) {
+    if (!existy(target)) {
+      fail('must provide target');
+    }
+    const targetMethod = target[name];
+    return doWhen((existy(targetMethod) && method === targetMethod), () => targetMethod.apply(target, args));
+  }
+}
+
 export function fnull(fun, ... defaults: any[]) {
   return (... args: any[]) => fun(... _.map(args, (arg, i) => existy(arg) ? arg : defaults[i]));
+}
+
+export function defaults(d) {
+  return function(o, k) {
+    const val = fnull(_.identity, d[k]);
+    return o && val(o[k]);
+  };
+}
+
+export function aMap(obj) {
+  return _.isObject(obj);
+}
+
+export function hasKeys(... keys: any[]) {
+  const fun = function(obj) {
+    return _.every(keys, k => _.has(obj, k));
+  };
+  fun.message = cat(['Must have keys:'], keys).join(' ');
+  return fun;
+}
+
+export function validator(message, fun) {
+  const f = function(... args: any[]) {
+    return fun.apply(fun, args);
+  };
+  f.message = message;
+  return f;
+}
+
+export function checker(... validators: any[]) {
+  return function(obj) {
+    return _.reduce(validators, (errs, check) => {
+      if (check(obj)) {
+        return errs;
+      } else {
+        return _.chain(errs).push(check.message).value();
+      }
+    }, []);
+  };
 }
