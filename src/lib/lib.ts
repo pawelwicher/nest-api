@@ -166,7 +166,7 @@ export function hasKeys(... keys: any[]) {
 
 export function validator(message, fun) {
   const f = function(... args: any[]) {
-    return fun.apply(fun, args);
+    return fun(... args);
   };
   f.message = message;
   return f;
@@ -182,4 +182,29 @@ export function checker(... validators: any[]) {
       }
     }, []);
   };
+}
+
+export function dispatch(... funs: any[]) {
+  const size = funs.length;
+
+  return function(target, ... args: any[]) {
+    let ret = undefined;
+
+    for (let funIndex = 0; funIndex < size; funIndex++) {
+      const fun = funs[funIndex];
+      ret = fun(target, ... args);
+
+      if (existy(ret)) {
+        return ret;
+      }
+    }
+
+    return ret;
+  }
+}
+
+export function stringReverse(s) {
+  if (_.isString(s)) {
+    return s.split('').reverse().join('');
+  }
 }

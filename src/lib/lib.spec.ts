@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, aMap, as, best, butLast, cat, checker, construct, defaults, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, truthy, validator } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, construct, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -207,6 +207,17 @@ describe('Lib', () => {
     expect(checkcommand({ msg: 'foo', type: 'test' })).toEqual([]);
     expect(checkcommand(42)).toEqual(['must be a map', 'Must have keys: msg type']);
     expect(checkcommand({})).toEqual(['Must have keys: msg type']);
+  });
+
+  it('dispatch should return proper result', () => {
+    const rev = dispatch(
+      invoker('reverse', Array.prototype.reverse),
+      stringReverse,
+      always(42)
+    );
+    expect(rev([1, 2, 3])).toEqual([3, 2, 1]);
+    expect(rev('abc')).toEqual('cba');
+    expect(rev(123)).toEqual(42);
   });
 
 });
