@@ -208,3 +208,25 @@ export function stringReverse(s) {
     return s.split('').reverse().join('');
   }
 }
+
+export function isa(type, action) {
+  return function(obj) {
+    if (type === obj.type) {
+      return action(obj);
+    }
+  }
+}
+
+export function curry(fun) {
+  return function(arg) {
+    return fun(arg);
+  }
+}
+
+export function curry2(fun) {
+  return function(secondArg) {
+    return function(firstArg) {
+      return fun(firstArg, secondArg);
+    }
+  }
+}

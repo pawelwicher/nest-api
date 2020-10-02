@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, aMap, as, best, butLast, cat, checker, construct, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -218,6 +218,29 @@ describe('Lib', () => {
     expect(rev([1, 2, 3])).toEqual([3, 2, 1]);
     expect(rev('abc')).toEqual('cba');
     expect(rev(123)).toEqual(42);
+  });
+
+  it('isa should return proper result', () => {
+    const performCommand = dispatch(
+      isa('sqr', obj => obj.arg * obj.arg),
+      isa('abs', obj => Math.abs(obj.arg)),
+      () => 42
+    );
+    expect(performCommand({ type: 'sqr', arg: 2 })).toEqual(4);
+    expect(performCommand({ type: 'abs', arg: -2 })).toEqual(2);
+    expect(performCommand({})).toEqual(42);
+  });
+
+  it('curry should return proper result', () => {
+    const add10 = x => x + 10;
+    const fun = curry(add10);
+    expect(fun(5)).toEqual(15);
+  });
+
+  it('curry2 should return proper result', () => {
+    const add = (x, y) => x + y;
+    const add5 = curry2(add)(5);
+    expect(add5(5)).toEqual(10);
   });
 
 });
