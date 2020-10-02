@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, aMap, as, best, butLast, cat, checker, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, iterateUntil, mapcat, nth, partial, partial1, partial2, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, condition1, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, isntString, iterateUntil, mapcat, nth, partial, partial1, partial2, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -260,5 +260,42 @@ describe('Lib', () => {
     const partialAdd = partial(add, 1, 2, 3);
     expect(partialAdd(4, 5)).toEqual(15);
   });
+
+  it('condition1 should return proper result', () => {
+    const sqrPre = condition1(
+      validator('arg must not be zero', x => x !== 0),
+      validator('arg must be a number', _.isNumber)
+    );
+    const sqr = x => x * x;
+    const checkedSqr = partial1(sqrPre, sqr);
+    expect(checkedSqr(10)).toEqual(100);
+    expect(() => checkedSqr('')).toThrowError('arg must be a number');
+    expect(() => checkedSqr(0)).toThrowError('arg must not be zero');
+  });
+
+  it('isntString should return proper result', () => {
+    expect(isntString(1)).toEqual(true);
+    expect(isntString('foo')).toEqual(false);
+  });
+
+  it('compose should return proper result', () => {
+    const sqrPre = condition1(
+      validator('arg must not be 0', x => x !== 0),
+      validator('arg must not be 1', x => x !== 1)
+    );
+    const sqrPost = condition1(
+      validator('result must not be 4', x => x !== 4),
+      validator('result must not be 100', x => x !== 100)
+    );
+    const sqr = x => x * x;
+    const checkedSqr = _.compose(partial(sqrPost, _.identity), partial(sqrPre, sqr));
+    expect(checkedSqr(5)).toEqual(25);
+    expect(() => checkedSqr(0)).toThrowError('arg must not be 0');
+    expect(() => checkedSqr(1)).toThrowError('arg must not be 1');
+    expect(() => checkedSqr(2)).toThrowError('result must not be 4');
+    expect(() => checkedSqr(10)).toThrowError('result must not be 100');
+  });
+
+  
 
 });

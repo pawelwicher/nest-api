@@ -250,3 +250,21 @@ export function partial(fun, ... args: any[]) {
     return fun(... [...args, ...pargs]);
   }
 }
+
+export function condition1(... validators: any[]) {
+  return function(fun, arg) {
+    const errors = mapcat(isValid => isValid(arg) ? [] : [isValid.message], validators);
+
+    if (!_.isEmpty(errors)) {
+      throw Error(errors.join(', '));
+    }
+
+    return fun(arg);
+  }
+}
+
+export function not(x) {
+  return !x;
+}
+
+export const isntString = _.compose(not, _.isString);
