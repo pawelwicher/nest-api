@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, aMap, as, best, butLast, cat, checker, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, iterateUntil, mapcat, nth, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, iterateUntil, mapcat, nth, partial, partial1, partial2, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -241,6 +241,24 @@ describe('Lib', () => {
     const add = (x, y) => x + y;
     const add5 = curry2(add)(5);
     expect(add5(5)).toEqual(10);
+  });
+
+  it('partial1 should return proper result', () => {
+    const add = (x, y) => x + y;
+    const add10 = partial1(add, 10);
+    expect(add10(5)).toEqual(15);
+  });
+
+  it('partial2 should return proper result', () => {
+    const add = (x, y, z) => x + y + z;
+    const add10Then20 = partial2(add, 10, 20);
+    expect(add10Then20(5)).toEqual(35);
+  });
+
+  it('partial should return proper result', () => {
+    const add = (a, b, c, d, e) => a + b + c + d + e;
+    const partialAdd = partial(add, 1, 2, 3);
+    expect(partialAdd(4, 5)).toEqual(15);
   });
 
 });

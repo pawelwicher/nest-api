@@ -230,3 +230,23 @@ export function curry2(fun) {
     }
   }
 }
+
+export function partial1(fun, arg1) {
+  return function(... args: any[]) {
+    args = construct(arg1, args);
+    return fun(... args);
+  }
+}
+
+export function partial2(fun, arg1, arg2) {
+  return function(... args: any[]) {
+    args = cat([arg1, arg2], args);
+    return fun(... args);
+  }
+}
+
+export function partial(fun, ... args: any[]) {
+  return function(... pargs: any[]) {
+    return fun(... [...args, ...pargs]);
+  }
+}
