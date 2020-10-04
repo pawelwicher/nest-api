@@ -268,3 +268,11 @@ export function not(x) {
 }
 
 export const isntString = _.compose(not, _.isString);
+
+export function myLength(arr) {
+  if (_.isEmpty(arr)) {
+    return 0;
+  } else {
+    return 1 + myLength(_.tail(arr));
+  }
+}

@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, aMap, as, best, butLast, cat, checker, condition1, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, isntString, iterateUntil, mapcat, nth, partial, partial1, partial2, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, condition1, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, isntString, iterateUntil, mapcat, myLength, nth, partial, partial1, partial2, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -296,6 +296,9 @@ describe('Lib', () => {
     expect(() => checkedSqr(10)).toThrowError('result must not be 100');
   });
 
-  
+  it('isntString should return proper result', () => {
+    expect(myLength([])).toEqual(0);
+    expect(myLength([1, 2, 3])).toEqual(3);
+  });
 
 });
