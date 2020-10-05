@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import { always, aMap, as, best, butLast, cat, checker, condition1, construct, curry, curry2, defaults, dispatch, doWhen, existy, finder, fnull, hasKeys, interpose, invoker, isa, isIndexed, isntString, iterateUntil, mapcat, myLength, nth, partial, partial1, partial2, plucker, project, rename, repeatedly, restrict, stringReverse, truthy, validator } from './lib';
+import { always, aMap, as, best, butLast, cat, checker, condition1, construct, curry, curry2, cycle, defaults, dispatch, doWhen, existy, finder, flat, fnull, hasKeys, interpose, invoker, isa, isIndexed, isntString, iterateUntil, mapcat, myLength, nth, partial, partial1, partial2, pipeline, plucker, project, rename, repeatedly, restrict, stringReverse, tcLength, truthy, validator } from './lib';
 
 describe('Lib', () => {
 
@@ -296,9 +296,26 @@ describe('Lib', () => {
     expect(() => checkedSqr(10)).toThrowError('result must not be 100');
   });
 
-  it('isntString should return proper result', () => {
+  it('myLength should return proper result', () => {
     expect(myLength([])).toEqual(0);
     expect(myLength([1, 2, 3])).toEqual(3);
+  });
+
+  it('cycle should return proper result', () => {
+    expect(cycle(3, [1, 2, 3])).toEqual([1, 2, 3, 1, 2, 3, 1, 2, 3]);
+  });
+  
+  it('tcLength should return proper result', () => {
+    expect(tcLength([], undefined)).toEqual(0);
+    expect(tcLength([1, 2, 3], undefined)).toEqual(3);
+  });
+
+  it('flat should return proper result', () => {
+    expect(flat([[1, 2], [3, 4]])).toEqual([1, 2, 3, 4]);
+  });
+
+  it('pipeline should return proper result', () => {
+    expect(pipeline([2, 3, null, 1, 42, false], _.compact, _.initial, _.tail)).toEqual([3, 1]);
   });
 
 });

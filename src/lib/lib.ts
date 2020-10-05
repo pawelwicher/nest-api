@@ -37,6 +37,10 @@ export function nth(a, index) {
   return a[index];
 }
 
+export function second(a) {
+  return nth(a, 1);
+} 
+
 export function cat(...args: any[]) {
   const head = _.first(args);
   if (existy(head)) {
@@ -274,5 +278,35 @@ export function myLength(arr) {
     return 0;
   } else {
     return 1 + myLength(_.tail(arr));
+  } 
+}
+
+export function cycle(times, arr) {
+  if (times <= 0) {
+    return [];
+  } else {
+    return cat(arr, cycle(times - 1, arr));
   }
+}
+
+export function tcLength(arr, n) {
+  const l = n ? n : 0;
+
+  if (_.isEmpty(arr)) {
+    return l;
+  } else {
+    return tcLength(_.tail(arr), l + 1);
+  } 
+}
+
+export function flat(arr) {
+  if (_.isArray(arr)) {
+    return cat(... _.map(arr, flat));
+  } else {
+    return [arr];
+  }
+}
+
+export function pipeline(seed, ... funs: any[]) {
+  return _.reduce(funs, (l, r) => r(l), seed);
 }
