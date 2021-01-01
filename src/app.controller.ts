@@ -5,10 +5,18 @@ import { AppService } from './app.service';
 @ApiTags('App Controller')
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+
+  constructor(
+    private readonly appService: AppService) { }
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  hello(): string {
+    return this.appService.hello();
   }
+
+  @Get('init')
+  init(): string {
+    return this.appService.initBoard();
+  }
+
 }
